@@ -17,7 +17,12 @@ app.use(express.static(__dirname + '/public'));
 // Get current user
 // Change current user
 app.get("/user", function(req,res) {
-
+  var username = req.param('username');
+  var password = req.param('password');
+  var userSql = 'select exists (select username from Tony.till_users where username = \"' + username + '\" and password = \"' +  password + '\") as isValid';
+  var validateUser = queryPromiser(DBF, userSql).then(function (valid){
+    res.send(valid);
+  });
 });
 
 // return JSON object of current buttons

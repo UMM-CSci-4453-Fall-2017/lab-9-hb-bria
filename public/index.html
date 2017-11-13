@@ -17,10 +17,16 @@
 <div class="container-fluid">
     <h1>Cash Register (with buttons)</h1>
     <div id="buttons" ng-controller="buttonCtrl" >
+      <form ng-show="!loggedIn" ng-submit="logIn(username, password)">
+        Username: <input type="text" ng-model="username" name="text" />
+        Password: <input type="text" ng-model="password" name="text" />
+        <input type="submit" id="submit" value="Submit" />
+      </form>
+      <div ng-show="loggedIn">
        <div ng-repeat="button in buttons">
          <div style="position:absolute;left:{{button.left}}px;top:{{button.top}}px"><button id="{{button.buttonID}}" ng-click="buttonClick($event,'button.buttonID');" >{{button.label}}</button></div>
        </div>
-       <div style="position:fixed;height:50px;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
+       <div style="position:fixed;height:50px;bottom:0px;left:0px;right:0px;margin-bottom:0px" ng-show="errorMessage != ''">
           <div class="col-sm-12">
            <h3 class="text-danger">{{errorMessage}}</h3>
          </div>
@@ -29,6 +35,10 @@
          <button type="button" class="list-group-item" id="invID-{{eachItem.invID}}" ng-repeat='eachItem in currentTrans' ng-click="deleteClick($event);">{{eachItem.label}} #{{eachItem.amount}} ${{(eachItem.price * eachItem.amount).toFixed(2)}}</button>
          <div class="alert alert-info" role="alert">Total: ${{total}}</div>
        </div>
+       <div style="position:absolute;bottom:850px;left:16px">
+       <button ng-click="logOut();"> Log Out </button>
+     </div>
+   </div>
      </div>
 
      <!-- Create a table of it -->
