@@ -17,6 +17,9 @@ function ButtonCtrl($scope,buttonApi){
   $scope.loggedIn = 0;
   $scope.logIn = logIn;
   $scope.logOut = logOut;
+  $scope.test = sale;
+  $scope.void = vooid;
+  $scope.currentUser = "";
 
 
   var loading = false;
@@ -64,9 +67,17 @@ function ButtonCtrl($scope,buttonApi){
       if(valid[0].isValid){
         console.log("It worked! you're logged in");
         $scope.loggedIn = 1;
+        $scope.currentUser = $scope.username;
       }else{
         console.log("You don't exist brah");
       }
+      buttonApi.getTrans()
+      .success(function (transactions){
+        $scope.currentTrans = transactions;
+        $scope.total = getTotalAmount(transactions);
+      })
+      $scope.username = "";
+      $scope.password = "";
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
   }
@@ -76,6 +87,28 @@ function ButtonCtrl($scope,buttonApi){
     $scope.loggedIn = 0;
   }
 
+  function sale(){
+    console.log("gonna sell ya shit dude");
+    buttonApi.sale()
+    .success(function (IDs){
+    })
+    .error(function(){$scope.errorMessage="IDK what to put here";});
+  }
+
+  function vooid(){
+    console.log("gonna delete ya shit dude");
+    buttonApi.void()
+    .success(function (message){
+      console.log(message)
+      buttonApi.getTrans()
+      .success(function (transactions){
+        $scope.currentTrans = transactions;
+        $scope.total = getTotalAmount(transactions);
+      })
+      .error(function(){$scope.errorMessage="IDK what to put here";});
+    })
+    .error(function(){$scope.errorMessage="IDK what to put here";});
+  }
   refreshButtons();  //make sure the buttons are loaded
 
 }
@@ -106,6 +139,21 @@ function buttonApi($http,apiUrl){
     },
     logIn: function(username, password){
       var url = apiUrl+'/user?username=' + username +'&password=' + password;
+      console.log(url);
+      return $http.get(url);
+    },
+    sale: function(){
+      var url = apiUrl+'/sale';
+      console.log(url);
+      return $http.get(url);
+    },
+    void: function(){
+      var url = apiUrl + '/void';
+      console.log(url);
+      return $http.get(url);
+    },
+    getTrans: function(){
+      var url = apiUrl + '/transactions';
       console.log(url);
       return $http.get(url);
     }

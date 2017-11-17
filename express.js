@@ -36,6 +36,15 @@ app.get("/buttons",function(req,res){
   .catch(function(err){console.log("DANGER:",err)});
 });
 
+app.get("/transactions", function(req,res){
+  var getTransactions = 'select * from Tony.current_trans';
+  queryPromiser(DBF, getTransactions)
+  .then(function (transactions){
+    res.send(transactions);
+  })
+  .catch(function(err){console.log("DANGER:",err)});
+});
+
 // update the current transaction table to reflect the-item button clicked
 app.get("/click",function(req,res){
   // buttonID
@@ -73,17 +82,30 @@ app.get("/click",function(req,res){
 // TODO for lab 9
 // complete the current transaction and clear the transaction table
 app.get("/sale", function(req, res) {
-
+  var currentUser = req.param('currentUser');
+  var getTransID = "select distinct transactionID from Tony.archive_items";
+  queryPromiser(DBF, getTransID)
+  .then(function (transactionIDs){
+    res.send(transactionIDs);
+  })
+  .catch(function(err){console.log("DANGER:",err)});
 });
 
-// TODO for lab 9
 // abort the current transaction
 app.get("/void", function(req,res) {
+  var sql = 'Truncate table Tony.current_trans';
 
+  queryPromiser(DBF, sql)
+  .then (function (msg) {
+    res.send(msg);
+    return msg;
+  })
+  .catch(function(err){console.log("DANGER:",err)});
 });
 
 // provide JSON object of items in current transaction
 app.get("/list", function(req,res) {
+
 });
 
 // remove item(s) from current transaction
