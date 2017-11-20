@@ -60,16 +60,14 @@ function ButtonCtrl($scope,buttonApi){
     .error(function(){$scope.errorMessage="Unable click";});
   }
 
-  function logIn(){
+  function logIn(username, password){
     console.log("ayy lmao");
-    buttonApi.logIn($scope.username, $scope.password)
-    .success(function (valid){
-      if(valid[0].isValid){
-        console.log("It worked! you're logged in");
-        $scope.loggedIn = 1;
-        $scope.currentUser = $scope.username;
-      }else{
-        console.log("You don't exist brah");
+    buttonApi.logIn(username)
+    .success(function (passwords){
+      for(var i = 0; i < passwords.length; i++){
+        if(passwords[i].password === password){
+          $scope.loggedIn = 1;
+        }
       }
       buttonApi.getTrans()
       .success(function (transactions){
@@ -137,8 +135,8 @@ function buttonApi($http,apiUrl){
       console.log(invID.substring(6));
       return $http.get(url);
     },
-    logIn: function(username, password){
-      var url = apiUrl+'/user?username=' + username +'&password=' + password;
+    logIn: function(username){
+      var url = apiUrl+'/user?username=' + username;
       console.log(url);
       return $http.get(url);
     },
