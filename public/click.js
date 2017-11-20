@@ -20,6 +20,8 @@ function ButtonCtrl($scope,buttonApi){
   $scope.test = sale;
   $scope.void = vooid;
   $scope.currentUser = "";
+  $scope.startTime = null;
+  $scope.stopTime = null;
 
 
   var loading = false;
@@ -42,7 +44,13 @@ function ButtonCtrl($scope,buttonApi){
   }
 
   function buttonClick($event){
-    $scope.errorMessage='';
+    if ($scope.startTime === null) {
+        $scope.startTime = new Date().getTime() / 1000;
+    } else {
+        $scope.endTime = new Date().getTime() / 1000;
+    }
+    console.log($scope.startTime);
+    console.log($scope.endTime);
     buttonApi.clickButton($event.target.id)
     .success(function(currentTrans){
       $scope.currentTrans = currentTrans;
@@ -85,10 +93,12 @@ function ButtonCtrl($scope,buttonApi){
     $scope.loggedIn = 0;
   }
 
+  // Do nothing
   function sale(){
     console.log("gonna sell ya shit dude");
     buttonApi.sale()
     .success(function (IDs){
+      resetTime();
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
   }
@@ -100,6 +110,7 @@ function ButtonCtrl($scope,buttonApi){
       console.log(message)
       buttonApi.getTrans()
       .success(function (transactions){
+        resetTime();
         $scope.currentTrans = transactions;
         $scope.total = getTotalAmount(transactions);
       })
@@ -109,6 +120,11 @@ function ButtonCtrl($scope,buttonApi){
   }
   refreshButtons();  //make sure the buttons are loaded
 
+}
+
+function resetTime() {
+  $scope.startTime = null;
+  $scope.stopTime = null;
 }
 
 function getTotalAmount(currentTrans) {
