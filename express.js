@@ -82,10 +82,10 @@ app.get("/click",function(req,res){
 // complete the current transaction and clear the transaction table
 app.get("/sale", function(req, res) {
   var currentUser = req.param('currentUser');
-  var getTransID = "select distinct transactionID from Tony.archive_items";
+  var getTransID = "call Tony.myprocedure(\"" + currentUser + "\")";
   queryPromiser(DBF, getTransID)
-  .then(function (transactionIDs){
-    res.send(transactionIDs);
+  .then(function (message){
+    res.send(message)
   })
   .catch(function(err){console.log("DANGER:",err)});
 });

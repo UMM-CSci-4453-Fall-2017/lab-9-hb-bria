@@ -72,16 +72,20 @@ function ButtonCtrl($scope,buttonApi){
     console.log("ayy lmao");
     buttonApi.logIn(username)
     .success(function (passwords){
-      for(var i = 0; i < passwords.length; i++){
-        if(passwords[i].password === password){
+
+        if(passwords[0].password === password){
           $scope.loggedIn = 1;
+
         }
-      }
+
       buttonApi.getTrans()
       .success(function (transactions){
         $scope.currentTrans = transactions;
         $scope.total = getTotalAmount(transactions);
       })
+      $scope.currentUser = username;
+      console.log("adfasdf");
+      console.log($scope.currentUser);
       $scope.username = "";
       $scope.password = "";
     })
@@ -96,9 +100,10 @@ function ButtonCtrl($scope,buttonApi){
   // Do nothing
   function sale(){
     console.log("gonna sell ya shit dude");
-    buttonApi.sale()
-    .success(function (IDs){
-      resetTime();
+    buttonApi.sale($scope.currentUser)
+    .success(function (message){
+      console.log(message);
+      vooid();
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
   }
@@ -118,13 +123,14 @@ function ButtonCtrl($scope,buttonApi){
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
   }
+
+  function resetTime() {
+    $scope.startTime = null;
+    $scope.stopTime = null;
+  }
+
   refreshButtons();  //make sure the buttons are loaded
 
-}
-
-function resetTime() {
-  $scope.startTime = null;
-  $scope.stopTime = null;
 }
 
 function getTotalAmount(currentTrans) {
@@ -156,8 +162,8 @@ function buttonApi($http,apiUrl){
       console.log(url);
       return $http.get(url);
     },
-    sale: function(){
-      var url = apiUrl+'/sale';
+    sale: function(currentUser){
+      var url = apiUrl+'/sale?currentUser=' + currentUser;
       console.log(url);
       return $http.get(url);
     },
