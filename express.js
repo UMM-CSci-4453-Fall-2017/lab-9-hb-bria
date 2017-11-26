@@ -64,7 +64,7 @@ app.get("/click",function(req,res){
       return queryPromiser(DBF, updateSql);
     } else {
       // Create a new one
-      var insertSql = 'insert into Tony.current_trans values (' + itemInfo.invID + ',' + 1 + ',\"' + itemInfo.label + '\",' + itemInfo.price + ')';
+      var insertSql = 'insert into Tony.current_trans values (' + itemInfo.invID + ',' + 1 + ',\"' + itemInfo.label + '\",' + itemInfo.price + ',' + null +')';
       return queryPromiser(DBF, insertSql);
     }
   })
