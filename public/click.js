@@ -21,9 +21,6 @@ function ButtonCtrl($scope,buttonApi){
   $scope.void = vooid;
   $scope.reciept = reciept;
   $scope.currentUser = "";
-  $scope.startTime = null;
-  $scope.stopTime = null;
-
 
   var loading = false;
 
@@ -45,13 +42,6 @@ function ButtonCtrl($scope,buttonApi){
   }
 
   function buttonClick($event){
-    if ($scope.startTime === null) {
-        $scope.startTime = new Date().getTime() / 1000;
-    } else {
-        $scope.endTime = new Date().getTime() / 1000;
-    }
-    console.log($scope.startTime);
-    console.log($scope.endTime);
     buttonApi.clickButton($event.target.id)
     .success(function(currentTrans){
       $scope.currentTrans = currentTrans;
@@ -94,13 +84,11 @@ function ButtonCtrl($scope,buttonApi){
   }
 
   function logOut(){
-    console.log("I'm gonna log you out now")
     $scope.loggedIn = 0;
   }
 
   // Do nothing
   function sale(){
-    console.log("gonna sell ya shit dude");
     buttonApi.sale($scope.currentUser)
     .success(function (message){
         console.log(message);
@@ -111,13 +99,10 @@ function ButtonCtrl($scope,buttonApi){
   }
 
   function vooid(){
-    console.log("gonna delete ya shit dude");
     buttonApi.void()
     .success(function (message){
-      console.log(message)
       buttonApi.getTrans()
       .success(function (transactions){
-        resetTime();
         $scope.currentTrans = transactions;
         $scope.total = getTotalAmount(transactions);
       })
@@ -129,7 +114,7 @@ function ButtonCtrl($scope,buttonApi){
   function reciept() {
         var result = "";
         for(var i = 0; i < $scope.currentTrans.length; i++){
-          result += "Product: " + $scope.currentTrans[i].label + '\n';  
+          result += "Product: " + $scope.currentTrans[i].label + '\n';
             result += '\t' + "Amount: " + $scope.currentTrans[i].amount + '\n';
             result += '\t' + "Price: " + $scope.currentTrans[i].price + '\n';
       }
@@ -137,11 +122,6 @@ function ButtonCtrl($scope,buttonApi){
       result += 'Transaction Total: ' + getTotalAmount($scope.currentTrans);
 
       alert(result);
-  }
-
-  function resetTime() {
-    $scope.startTime = null;
-    $scope.stopTime = null;
   }
 
   refreshButtons();  //make sure the buttons are loaded
@@ -164,7 +144,6 @@ function buttonApi($http,apiUrl){
     },
     clickButton: function(id){
       var url = apiUrl+'/click?id='+id;
-      //      console.log("Attempting with "+url);
       return $http.get(url); // Easy enough to do this way
     },
     removeButton: function(invID) {
