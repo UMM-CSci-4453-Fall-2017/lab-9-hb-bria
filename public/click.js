@@ -19,6 +19,7 @@ function ButtonCtrl($scope,buttonApi){
   $scope.logOut = logOut;
   $scope.test = sale;
   $scope.void = vooid;
+  $scope.reciept = reciept;
   $scope.currentUser = "";
   $scope.startTime = null;
   $scope.stopTime = null;
@@ -122,6 +123,18 @@ function ButtonCtrl($scope,buttonApi){
       .error(function(){$scope.errorMessage="IDK what to put here";});
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
+  }
+
+  function reciept() {
+        var result = "";
+        for(var i = 0; i < $scope.currentTrans.length; i++){
+            result += $scope.currentTrans[i].amount + '\n';
+            result += $scope.currentTrans[i].label + '\n';
+            result += $scope.currentTrans[i].price + '\n';
+            result += $scope.currentTrans[i].price + '\n';
+        }
+
+      alert(result);
   }
 
   function resetTime() {
