@@ -103,7 +103,8 @@ function ButtonCtrl($scope,buttonApi){
     console.log("gonna sell ya shit dude");
     buttonApi.sale($scope.currentUser)
     .success(function (message){
-      console.log(message);
+        console.log(message);
+        reciept();
       vooid();
     })
     .error(function(){$scope.errorMessage="IDK what to put here";});
@@ -128,11 +129,12 @@ function ButtonCtrl($scope,buttonApi){
   function reciept() {
         var result = "";
         for(var i = 0; i < $scope.currentTrans.length; i++){
-            result += $scope.currentTrans[i].amount + '\n';
-            result += $scope.currentTrans[i].label + '\n';
-            result += $scope.currentTrans[i].price + '\n';
-            result += $scope.currentTrans[i].price + '\n';
-        }
+          result += "Product: " + $scope.currentTrans[i].label + '\n';  
+            result += '\t' + "Amount: " + $scope.currentTrans[i].amount + '\n';
+            result += '\t' + "Price: " + $scope.currentTrans[i].price + '\n';
+      }
+
+      result += 'Transaction Total: ' + getTotalAmount($scope.currentTrans);
 
       alert(result);
   }
