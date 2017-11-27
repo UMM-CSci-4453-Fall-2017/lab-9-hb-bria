@@ -13,9 +13,7 @@ DBF.generateConnection();
 
 app.use(express.static(__dirname + '/public'));
 
-// TODO for lab 9
-// Get current user
-// Change current user
+// Gets password for the given username
 app.get("/user", function(req,res) {
   var username = req.param('username');
   var userSql = 'select password from Tony.till_users where username = \"' + username + "\"";
@@ -35,15 +33,6 @@ app.get("/buttons",function(req,res){
   .catch(function(err){console.log("DANGER:",err)});
 });
 
-app.get("/transactions", function(req,res){
-  var getTransactions = 'select * from Tony.current_trans';
-  queryPromiser(DBF, getTransactions)
-  .then(function (transactions){
-    res.send(transactions);
-  })
-  .catch(function(err){console.log("DANGER:",err)});
-});
-
 // update the current transaction table to reflect the-item button clicked
 app.get("/click",function(req,res){
   // buttonID
@@ -51,7 +40,7 @@ app.get("/click",function(req,res){
   var itemInfo = null;
   var itemInfoSql = 'select invID, label, price from Tony.till_buttons where buttonID = ' + btnID;
 
-  queryPromiser(DBF, itemInfoSql)
+  queryPromiser(DBF, itemInfoSql)// TODO for lab 9
   .then(function (idResult) {
     itemInfo = idResult[0];
     var validSql = 'select exists (select invID from Tony.current_trans where invID = ' + itemInfo.invID + ') as isValid';
@@ -78,7 +67,6 @@ app.get("/click",function(req,res){
   .catch(function(err){console.log("DANGER:",err)});
 });
 
-// TODO for lab 9
 // complete the current transaction and clear the transaction table
 app.get("/sale", function(req, res) {
   var currentUser = req.param('currentUser');
@@ -100,11 +88,6 @@ app.get("/void", function(req,res) {
     return msg;
   })
   .catch(function(err){console.log("DANGER:",err)});
-});
-
-// provide JSON object of items in current transaction
-app.get("/list", function(req,res) {
-
 });
 
 // remove item(s) from current transaction

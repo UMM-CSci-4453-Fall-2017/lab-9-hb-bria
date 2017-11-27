@@ -46,9 +46,9 @@
           <button type="button" class="list-group-item" id="invID-{{eachItem.invID}}" ng-repeat='eachItem in currentTrans' ng-click="deleteClick($event);">{{eachItem.label}} #{{eachItem.amount}} ${{(eachItem.price * eachItem.amount).toFixed(2)}}</button>
           <button type="button" class="alert alert-info" role="alert" ng-click="test();">Total: ${{total}}</button>
           <button type="button" class="alert alert-info" role="alert" ng-click="void();">Void</button>
-          <button type="button" class="alert alert-info" role="alert" ng-click="reciept();">Reciept</button>
+          <button type="button" class="alert alert-info" role="alert" ng-click="reciept();">Receipt</button>
         </div>
-        <div style="position:absolute;bottom:850px;left:16px">
+        <div>
           <button class="btn btn-lg btn-warning" ng-click="logOut();"> Log Out </button>
         </div>
       </div>
